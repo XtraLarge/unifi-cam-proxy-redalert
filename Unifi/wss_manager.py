@@ -1455,6 +1455,20 @@ class WssManager(threading.Thread):
         if not _get_setting(self.settings, ["wss.skipHello", "skipHello"]):
             self.protocol.reset_msg_id(-1)
             await self.protocol.send_hello(ws)
+
+        # Wire the driver's event_sender so it can push unsolicited events (e.g. Frigate detections).
+        async def _event_sender(function_name: str, payload: dict) -> None:
+            msg = CameraMessage(
+                function_name=function_name,
+                message_id=self.protocol._next_msg_id(),
+                in_response_to=0,
+                payload=payload,
+            )
+            await self.protocol.send(ws, msg)
+
+        self.driver.event_sender = _event_sender
+        event_loop_task = asyncio.create_task(self.driver.start_event_loop())
+
         try:
             async for incoming in ws:
                 await self.protocol.handle_rx(ws, incoming)
@@ -1464,3 +1478,10 @@ class WssManager(threading.Thread):
         except Exception:
             self.log.exception("WSS: serve_loop crashed")
             raise
+        finally:
+            event_loop_task.cancel()
+            try:
+                await event_loop_task
+            except asyncio.CancelledError:
+                pass
+            self.driver.event_sender = None

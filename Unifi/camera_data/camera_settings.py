@@ -233,6 +233,22 @@ class CameraSettings:
                 "profiles": None,
             },
             "streams": {},
+            "camera": {
+                "type": "null",
+            },
+            "frigate": {
+                "http_url": "",
+                "camera": "",
+                "rtsp_url": "",
+                "mqtt_host": "",
+                "mqtt_port": 1883,
+                "mqtt_username": "",
+                "mqtt_password": "",
+                "mqtt_prefix": "frigate",
+                "detect_width": 1280,
+                "detect_height": 720,
+                "time_sync_ms": 0,
+            },
             "wss": {
                 "adoptionCode": "",
                 "connectionSecurePort": 7442,

@@ -7,6 +7,9 @@ class CameraDriver:
         self.settings = settings
         self.log = log
         self._push_procs = {}  # videoId -> asyncio.subprocess.Process
+        # Set by WssManager when connected; call to send unsolicited events upstream.
+        # Signature: event_sender(function_name: str, payload: dict) -> Coroutine
+        self.event_sender = None
 
     async def get_snapshot_jpeg(self, timeout_s: int = 2) -> bytes:
         raise NotImplementedError
@@ -16,6 +19,14 @@ class CameraDriver:
 
     async def describe(self) -> dict:
         return {"driver": self.__class__.__name__}
+
+    async def start_event_loop(self) -> None:
+        """
+        Optional long-running coroutine started when the WSS connection is established.
+        Override in subclasses that need external event sources (e.g., MQTT for Frigate).
+        Cancelled automatically on disconnect.
+        """
+        pass
 
     async def apply_video_settings(self, cfg: Any) -> dict:
         # coerce cfg to dict
