@@ -28,7 +28,7 @@ hello handshake, responds to controller commands, and emits minimal camera event
 - Optional replay traces (local capture directory).
 
 ### WSS Connection Information
-- Endpoint: `wss://192.0.2.10:7442/camera/1.0/ws?token=kwriu7hRFqfQPR5yx9lcSmGjX61q8TNH`
+- Endpoint: `wss://192.0.2.10:7442/camera/1.0/ws?token=EXAMPLE_WSS_TOKEN`
 - Subprotocol: `secure_transfer`
 - Headers:
   - `Camera-Mac`: lowercase, no colons (example: `68d79ae592d3`)
@@ -216,7 +216,7 @@ Example (Controller -> Camera)
 
 Example (Camera -> Controller)
 ```json
-{"from":"ubnt_avclient","to":"UniFiVideo","functionName":"ubnt_avclient_paramAgreement","messageId":78249995,"inResponseTo":10156,"payload":{"authToken":"kwriu7hRFqfQPR5yx9lcSmGjX61q8TNH"}}
+{"from":"ubnt_avclient","to":"UniFiVideo","functionName":"ubnt_avclient_paramAgreement","messageId":78249995,"inResponseTo":10156,"payload":{"authToken":"EXAMPLE_WSS_TOKEN"}}
 ```
 
 Tests
@@ -631,7 +631,7 @@ Evidence
 - `semver`: `X.Y.Z` format used by controller semver checks. Example: `5.1.217`.
 - `fwVersion`: full firmware string. Example: `UVC.S5L.v5.1.217`.
 - `protocolVersion`: WSS protocol integer. Example: `67`.
-- `authToken`: token returned in `ubnt_avclient_paramAgreement`. Example: `kwriu7hRFqfQPR5yx9lcSmGjX61q8TNH`.
+- `authToken`: token returned in `ubnt_avclient_paramAgreement`. Example: `EXAMPLE_WSS_TOKEN`.
 - `enableStatusCodes`: controller requests status codes in replies. Example: `true`.
 - `useHeartbeats`: controller toggles heartbeat loop. Example: `false`.
 - `heartbeatsTimeoutMs`: heartbeat timeout in milliseconds. Example: `60000`.
@@ -727,6 +727,6 @@ Use these example values in all docs and snippets (random, realistic, and safe):
 - `<mac_colon>`: `68:D7:9A:E5:92:D3`
 - `<model_id>`: `0xa573`
 - `<uuid>`: `a429fbf9-1464-4ab8-89a8-bfb08ff9c445`
-- `<token>`: `kwriu7hRFqfQPR5yx9lcSmGjX61q8TNH`
+- `<token>`: `EXAMPLE_WSS_TOKEN`
 - `<stream_name>`: `cam_g4_dome_720p`
 - `<controller_name>`: `Unifi Protect`

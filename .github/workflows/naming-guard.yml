@@ -1,0 +1,35 @@
+name: naming-guard
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+permissions:
+  contents: read
+
+jobs:
+  naming-guard:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Run naming-guard (keine internen Netz-/Hostnamen oder Klartext-Secrets)
+        run: bash scripts/naming-guard.sh
+
+  gitleaks:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install gitleaks
+        run: |
+          set -euo pipefail
+          VER=8.18.4
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          sudo install -m0755 gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+      - name: Run gitleaks (Secret-Scan des Arbeitsbaums)
+        run: gitleaks detect --source . --no-git --redact -v
